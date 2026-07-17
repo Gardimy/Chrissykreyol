@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 
 import { AgentsModule } from './agents/agents.module';
 import { AgentsModule } from './agents/agents.module';
+import { BoardModule } from './board/board.module';
 
 
 @Module({
@@ -39,7 +40,10 @@ synchronize:true
 }),
 
 
-AgentsModule
+AgentsModule,
+
+
+BoardModule
 
 
 ],
