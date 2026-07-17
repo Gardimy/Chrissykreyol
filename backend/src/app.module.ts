@@ -1,65 +1,46 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AgentsModule } from './agents/agents.module';
 import { AgentsModule } from './agents/agents.module';
 import { BoardModule } from './board/board.module';
 import { PromoModule } from './promo/promo.module';
 import { BiographyModule } from './biography/biography.module';
 import { AdminModule } from './admin/admin.module';
 
-
 @Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
 
-imports:[
+    TypeOrmModule.forRoot({
+      type: 'postgres',
 
+      host: process.env.DATABASE_HOST,
 
-ConfigModule.forRoot({
-  isGlobal:true,
-  envFilePath: '.env'
-}),
+      port: Number(process.env.DATABASE_PORT),
 
+      username: process.env.DATABASE_USER,
 
-TypeOrmModule.forRoot({
+      password: process.env.DATABASE_PASSWORD,
 
-type:'postgres',
+      database: process.env.DATABASE_NAME,
 
-host:process.env.DATABASE_HOST,
+      autoLoadEntities: true,
 
-port:Number(process.env.DATABASE_PORT),
+      synchronize: false,
+    }),
 
-username:process.env.DATABASE_USER,
+    AgentsModule,
 
-password:process.env.DATABASE_PASSWORD,
+    BoardModule,
 
-database:process.env.DATABASE_NAME,
+    PromoModule,
 
+    BiographyModule,
 
-autoLoadEntities:true,
-
-synchronize:true
-
-}),
-
-
-AgentsModule,
-
-
-BoardModule,
-
-
-PromoModule,
-
-
-BiographyModule,
-
-
-AdminModule
-
-
-],
-
-
+    AdminModule,
+  ],
 })
 export class AppModule {}
