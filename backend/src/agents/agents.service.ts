@@ -1,105 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-
-import { Agent } from './entities/agent.entity';
-
+import { CreateAgentDto } from './dto/create-agent.dto';
+import { UpdateAgentDto } from './dto/update-agent.dto';
 
 @Injectable()
 export class AgentsService {
+  create(createAgentDto: CreateAgentDto) {
+    return 'This action adds a new agent';
+  }
 
+  findAll() {
+    return `This action returns all agents`;
+  }
 
-constructor(
+  findOne(id: number) {
+    return `This action returns a #${id} agent`;
+  }
 
-@InjectRepository(Agent)
+  update(id: number, updateAgentDto: UpdateAgentDto) {
+    return `This action updates a #${id} agent`;
+  }
 
-private agentRepository: Repository<Agent>
-
-){}
-
-
-
-async create(data:any){
-
-
-const agent = new Agent();
-
-
-agent.nom = data.nom;
-
-agent.prenom = data.prenom;
-
-agent.sexe = data.sexe;
-
-agent.statusMatrimonial = data.statusMatrimonial;
-
-agent.nifCin = data.nifCin;
-
-agent.email = data.email;
-
-agent.telephone = data.telephone;
-
-agent.niveauEtude = data.niveauEtude;
-
-
-
-agent.agentId = this.generateAgentId(
-data.nom,
-data.prenom
-);
-
-
-
-agent.codePromo = this.generatePromoCode(
-data.prenom
-);
-
-
-
-return await this.agentRepository.save(agent);
-
-
-}
-
-
-
-
-generateAgentId(
-nom:string,
-prenom:string
-){
-
-
-const n = nom.substring(0,3).toUpperCase();
-
-const p = prenom.substring(0,3).toUpperCase();
-
-
-const random =
-Math.floor(1000 + Math.random()*9000);
-
-
-return `${n}-${p}-${random}`;
-
-
-}
-
-
-
-
-
-generatePromoCode(prenom:string){
-
-
-const random =
-Math.floor(100 + Math.random()*900);
-
-
-return `CHRISSYKREYOL-${prenom.toUpperCase()}${random}`;
-
-
-}
-
-
-
+  remove(id: number) {
+    return `This action removes a #${id} agent`;
+  }
 }

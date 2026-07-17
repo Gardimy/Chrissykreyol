@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 
 import { AgentsModule } from './agents/agents.module';
+import { AgentsModule } from './agents/agents.module';
 
 
 @Module({
