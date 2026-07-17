@@ -1,14 +1,18 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+
+import { AgentsModule } from './agents/agents.module';
 
 
 @Module({
 
 imports:[
 
+
 ConfigModule.forRoot({
-isGlobal:true,
+  isGlobal:true,
+  envFilePath: '.env'
 }),
 
 
@@ -16,27 +20,29 @@ TypeOrmModule.forRoot({
 
 type:'postgres',
 
-host:process.env.DB_HOST,
+host:process.env.DATABASE_HOST,
 
-port:Number(process.env.DB_PORT),
+port:Number(process.env.DATABASE_PORT),
 
-username:process.env.DB_USERNAME,
+username:process.env.DATABASE_USER,
 
-password:process.env.DB_PASSWORD,
+password:process.env.DATABASE_PASSWORD,
 
-database:process.env.DB_DATABASE,
+database:process.env.DATABASE_NAME,
 
 
 autoLoadEntities:true,
 
-synchronize:true,
+synchronize:true
 
 }),
+
+
+AgentsModule
 
 
 ],
 
 
 })
-
 export class AppModule {}

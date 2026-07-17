@@ -2,7 +2,7 @@
 
 <div align="center">
   <br/>
-  <h1><b>Chryssy Kreyol</b></h1><a name="about-project"></a>
+  <h1><b>Chrissy Kreyol</b></h1><a name="about-project"></a>
 </div>
 
 # 📗 Table of Contents
