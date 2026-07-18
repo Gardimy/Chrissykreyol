@@ -1,26 +1,95 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+import { Agent } from './entities/agent.entity';
+
 import { CreateAgentDto } from './dto/create-agent.dto';
 import { UpdateAgentDto } from './dto/update-agent.dto';
 
+import { generateAgentId } from '../common/utils/generate-agent-id';
+import { generatePromoCode } from '../common/utils/generate-promo-code';
+
+
 @Injectable()
 export class AgentsService {
-  create(createAgentDto: CreateAgentDto) {
-    return 'This action adds a new agent';
+
+  constructor(
+    @InjectRepository(Agent)
+    private readonly agentRepository: Repository<Agent>,
+  ) {}
+
+
+  async create(
+    createAgentDto: CreateAgentDto,
+  ): Promise<Agent> {
+
+
+    const agent = this.agentRepository.create({
+
+      ...createAgentDto,
+
+      agentId: generateAgentId(
+        createAgentDto.nom,
+        createAgentDto.prenom,
+      ),
+
+      promoCode: generatePromoCode(),
+
+    });
+
+
+    return this.agentRepository.save(agent);
+
   }
 
-  findAll() {
-    return `This action returns all agents`;
+
+
+  async findAll(): Promise<Agent[]> {
+
+    return this.agentRepository.find();
+
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} agent`;
+
+
+  async findOne(id:number): Promise<Agent | null>{
+
+    return this.agentRepository.findOne({
+      where:{
+        id
+      }
+    });
+
   }
 
-  update(id: number, updateAgentDto: UpdateAgentDto) {
-    return `This action updates a #${id} agent`;
+
+
+  async update(
+    id:number,
+    updateAgentDto: UpdateAgentDto,
+  ){
+
+    await this.agentRepository.update(
+      id,
+      updateAgentDto,
+    );
+
+
+    return this.findOne(id);
+
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} agent`;
+
+
+  async remove(id:number){
+
+    await this.agentRepository.delete(id);
+
+    return {
+      message:"Agent deleted successfully"
+    };
+
   }
+
 }
