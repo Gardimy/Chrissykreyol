@@ -1,10 +1,22 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../services/api";
 
 
-const BoardRegister = () => {
+interface BoardForm {
+  nom: string;
+  prenom: string;
+  sexe: string;
+  email: string;
+  telephone: string;
+  profession: string;
+  motivation: string;
+}
 
-  const [formData, setFormData] = useState({
+
+export default function BoardRegister() {
+
+
+  const [form, setForm] = useState<BoardForm>({
     nom: "",
     prenom: "",
     sexe: "",
@@ -15,16 +27,25 @@ const BoardRegister = () => {
   });
 
 
+  const [message, setMessage] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
 
-    setFormData({
-      ...formData,
+    setForm({
+      ...form,
       [e.target.name]: e.target.value,
     });
 
   };
+
 
 
   const handleSubmit = async (
@@ -33,109 +54,323 @@ const BoardRegister = () => {
 
     e.preventDefault();
 
+    setLoading(true);
+    setMessage("");
 
     try {
 
-      const response = await axios.post(
-        "http://localhost:3000/board",
-        formData
+
+      await api.post(
+        "/board",
+        form
       );
 
 
-      alert(
-        "Demande envoyée avec succès"
+      setMessage(
+        "✅ Votre demande a été envoyée avec succès."
       );
 
-      console.log(response.data);
+
+      setForm({
+        nom:"",
+        prenom:"",
+        sexe:"",
+        email:"",
+        telephone:"",
+        profession:"",
+        motivation:"",
+      });
+
 
 
     } catch(error){
 
-      console.error(error);
-
-      alert(
-        "Erreur lors de l'inscription"
+      setMessage(
+        "❌ Une erreur est survenue. Veuillez réessayer."
       );
 
     }
 
+
+    setLoading(false);
+
   };
+
+
+
 
 
   return (
 
-    <div>
+    <div
+      className="
+      min-h-screen
+      bg-cover
+      bg-center
+      flex
+      items-center
+      justify-center
+      px-4
+      "
+      style={{
+        backgroundImage:
+        "url('/images/background.jpg')"
+      }}
+    >
 
-      <h1>
-        Demande pour rejoindre Board Direction
-      </h1>
+
+      <div
+        className="
+        bg-white
+        shadow-2xl
+        rounded-2xl
+        p-8
+        w-full
+        max-w-xl
+        "
+      >
 
 
-      <form onSubmit={handleSubmit}>
+        <div className="text-center mb-6">
 
 
-        <input
+          <img
+            src="/images/logo.png"
+            alt="Chrissy Kreyol"
+            className="
+            mx-auto
+            h-20
+            mb-4
+            "
+          />
+
+
+          <h1
+          className="
+          text-3xl
+          font-bold
+          text-gray-800
+          "
+          >
+            Demande Board Direction
+          </h1>
+
+
+          <p className="text-gray-500 mt-2">
+            Rejoignez l'équipe dirigeante Chrissy Kreyol
+          </p>
+
+
+        </div>
+
+
+
+
+
+        <form
+        onSubmit={handleSubmit}
+        className="space-y-4"
+        >
+
+
+
+          <input
+          type="text"
           name="nom"
           placeholder="Nom"
+          value={form.nom}
           onChange={handleChange}
-        />
+          className="
+          w-full
+          border
+          rounded-lg
+          p-3
+          focus:ring-2
+          focus:ring-purple-500
+          "
+          />
 
 
-        <input
+
+          <input
+          type="text"
           name="prenom"
-          placeholder="Prenom"
+          placeholder="Prénom"
+          value={form.prenom}
           onChange={handleChange}
-        />
+          className="
+          w-full
+          border
+          rounded-lg
+          p-3
+          "
+          />
 
 
-        <input
+
+
+
+          <select
           name="sexe"
-          placeholder="Sexe"
+          value={form.sexe}
           onChange={handleChange}
-        />
+          className="
+          w-full
+          border
+          rounded-lg
+          p-3
+          "
+          >
+
+            <option value="">
+              Sexe
+            </option>
+
+            <option value="Homme">
+              Homme
+            </option>
+
+            <option value="Femme">
+              Femme
+            </option>
+
+          </select>
 
 
-        <input
+
+
+
+          <input
+          type="email"
           name="email"
           placeholder="Email"
+          value={form.email}
           onChange={handleChange}
-        />
+          className="
+          w-full
+          border
+          rounded-lg
+          p-3
+          "
+          />
 
 
-        <input
+
+
+          <input
+          type="text"
           name="telephone"
-          placeholder="Telephone"
+          placeholder="Téléphone"
+          value={form.telephone}
           onChange={handleChange}
-        />
+          className="
+          w-full
+          border
+          rounded-lg
+          p-3
+          "
+          />
 
 
-        <input
+
+
+          <input
+          type="text"
           name="profession"
           placeholder="Profession"
+          value={form.profession}
           onChange={handleChange}
-        />
+          className="
+          w-full
+          border
+          rounded-lg
+          p-3
+          "
+          />
 
 
-        <textarea
+
+
+          <textarea
           name="motivation"
-          placeholder="Motivation"
+          placeholder="Votre motivation"
+          value={form.motivation}
           onChange={handleChange}
-        />
+          rows={4}
+          className="
+          w-full
+          border
+          rounded-lg
+          p-3
+          "
+          />
 
 
-        <button type="submit">
-          Envoyer demande
-        </button>
 
 
-      </form>
+
+          <button
+          disabled={loading}
+          className="
+          w-full
+          bg-purple-700
+          hover:bg-purple-800
+          text-white
+          font-bold
+          py-3
+          rounded-lg
+          transition
+          "
+          >
+
+            {
+              loading
+              ?
+              "Envoi..."
+              :
+              "Envoyer la demande"
+            }
+
+
+          </button>
+
+
+
+
+        </form>
+
+
+
+
+
+        {
+          message && (
+
+            <div
+            className="
+            mt-5
+            text-center
+            bg-gray-100
+            p-3
+            rounded-lg
+            "
+            >
+
+              {message}
+
+            </div>
+
+          )
+        }
+
+
+
+
+      </div>
 
 
     </div>
 
   );
 
-};
-
-
-export default BoardRegister;
+}
