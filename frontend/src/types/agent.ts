@@ -1,68 +1,40 @@
-export interface AgentForm {
-
-
-  nom:string;
-
-
-  prenom:string;
-
-
-  sexe:string;
-
-
-  statut:string;
-
-
-  nifCin:string;
-
-
-  email:string;
-
-
-  telephone:string;
-
-
-}
-
-
-
 export interface AgentResponse {
 
 
- id:number;
+    id:number;
 
 
- agentId:string;
+    agentId:string;
 
 
- promoCode:string;
+    promoCode:string;
 
 
- nom:string;
+    nom:string;
 
 
- prenom:string;
+    prenom:string;
 
 
- sexe:string;
+    sexe:string;
 
 
- statut:string;
+    statut:string;
 
 
- nifCin:string;
+    nifCin:string;
 
 
- email:string;
+    email:string;
 
 
- telephone:string;
+    telephone:string;
 
 
- createdAt:string;
+    createdAt:string;
 
 
- updatedAt:string;
+    updatedAt:string;
 
 
 }

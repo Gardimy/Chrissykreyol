@@ -1,224 +1,348 @@
 import {
- useState,
+    useState
 } from "react";
 
 
 import {
- createAgent,
+    createAgent
 } from "../services/agent.service";
 
 
-function AgentRegister(){
-
-
-const [form,setForm]=useState({
-
-nom:"",
-prenom:"",
-sexe:"",
-statut:"",
-nifCin:"",
-email:"",
-telephone:"",
-
-});
+import type {
+    AgentResponse
+} from "../types/agent";
 
 
 
-const [result,setResult]=useState<any>(null);
+const AgentRegister = () => {
+
+
+    const [formData,setFormData] = useState({
+
+        nom:"",
+        prenom:"",
+        sexe:"",
+        statut:"",
+        nifCin:"",
+        email:"",
+        telephone:""
+
+    });
+
+
+
+    const [
+        agent,
+        setAgent
+    ] = useState<AgentResponse | null>(null);
+
+
+
+    const [
+        loading,
+        setLoading
+    ] = useState(false);
+
+
+
+    const handleChange = (
+        e:React.ChangeEvent<
+            HTMLInputElement |
+            HTMLSelectElement
+        >
+    )=>{
+
+
+        setFormData({
+
+            ...formData,
+
+            [e.target.name]:
+            e.target.value
+
+        });
+
+
+    };
+
+
+
+
+    const handleSubmit = async(
+        e:React.FormEvent
+    )=>{
+
+
+        e.preventDefault();
+
+
+        try{
+
+
+            setLoading(true);
+
+
+
+            const response =
+            await createAgent(formData);
+
+
+
+            setAgent(response);
+
+
+
+            setFormData({
+
+                nom:"",
+                prenom:"",
+                sexe:"",
+                statut:"",
+                nifCin:"",
+                email:"",
+                telephone:""
+
+            });
+
+
+
+        }catch(error){
+
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "Erreur lors de l'inscription"
+            );
+
+
+        }finally{
+
+
+            setLoading(false);
+
+
+        }
+
+
+    };
+
+
+
+
+    return (
+
+        <div>
+
+
+            <h1>
+                Rejoindre Chrissy Kreyol
+            </h1>
+
+
+
+            {
+                !agent && (
+
+                <form
+                    onSubmit={handleSubmit}
+                >
+
+
+                    <input
+                    type="text"
+                    name="nom"
+                    placeholder="Nom"
+                    value={formData.nom}
+                    onChange={handleChange}
+                    />
+
+
+                    <input
+                    type="text"
+                    name="prenom"
+                    placeholder="Prenom"
+                    value={formData.prenom}
+                    onChange={handleChange}
+                    />
+
+
+
+                    <select
+                    name="sexe"
+                    value={formData.sexe}
+                    onChange={handleChange}
+                    >
+
+                        <option value="">
+                            Sexe
+                        </option>
+
+                        <option value="Homme">
+                            Homme
+                        </option>
+
+                        <option value="Femme">
+                            Femme
+                        </option>
+
+
+                    </select>
+
+
+
+
+                    <select
+                    name="statut"
+                    value={formData.statut}
+                    onChange={handleChange}
+                    >
+
+                        <option value="">
+                            Statut matrimonial
+                        </option>
+
+
+                        <option value="Célibataire">
+                            Célibataire
+                        </option>
+
+
+                        <option value="Marié(e)">
+                            Marié(e)
+                        </option>
+
+
+                        <option value="Divorcé(e)">
+                            Divorcé(e)
+                        </option>
+
+
+                        <option value="Veuf(ve)">
+                            Veuf(ve)
+                        </option>
+
+
+                    </select>
+
+
+
+
+                    <input
+                    type="text"
+                    name="nifCin"
+                    placeholder="NIF ou CIN"
+                    value={formData.nifCin}
+                    onChange={handleChange}
+                    />
+
+
+
+
+                    <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    />
+
+
+
+
+                    <input
+                    type="text"
+                    name="telephone"
+                    placeholder="Téléphone"
+                    value={formData.telephone}
+                    onChange={handleChange}
+                    />
+
+
+
+
+                    <button
+                    type="submit"
+                    disabled={loading}
+                    >
+
+                    {
+                        loading
+                        ?
+                        "Envoi..."
+                        :
+                        "Envoyer demande"
+                    }
+
+                    </button>
+
+
+
+                </form>
+
+                )
+            }
 
 
 
 
 
-const handleChange=(e:any)=>{
+            {
+                agent && (
+
+                <div>
 
 
-setForm({
-
-...form,
-
-[e.target.name]:
-e.target.value
-
-});
-
-
-}
+                    <h2>
+                        Félicitations {agent.nom} {agent.prenom}
+                    </h2>
 
 
 
+                    <p>
+                        Votre inscription est validée.
+                    </p>
 
 
-const submit=async(e:any)=>{
+
+                    <h3>
+                        Agent ID:
+                    </h3>
+
+                    <strong>
+                        {agent.agentId}
+                    </strong>
 
 
-e.preventDefault();
 
 
-const data =
-await createAgent(form);
+                    <h3>
+                        Code Promo:
+                    </h3>
 
 
-setResult(data);
+                    <strong>
+                        {agent.promoCode}
+                    </strong>
 
+
+
+                </div>
+
+                )
+            }
+
+
+
+        </div>
+
+    );
 
 };
 
-
-
-
-return (
-
-<div>
-
-
-<h1>
-Inscription Agent Chrissy Kreyol
-</h1>
-
-
-
-<form onSubmit={submit}>
-
-
-<input
-name="nom"
-placeholder="Nom"
-onChange={handleChange}
-/>
-
-
-<input
-name="prenom"
-placeholder="Prenom"
-onChange={handleChange}
-/>
-
-
-<input
-name="email"
-placeholder="Email"
-onChange={handleChange}
-/>
-
-
-<input
-name="telephone"
-placeholder="Téléphone"
-onChange={handleChange}
-/>
-
-
-<input
-name="nifCin"
-placeholder="NIF/CIN"
-onChange={handleChange}
-/>
-
-
-
-<select
-name="sexe"
-onChange={handleChange}
->
-
-<option>
-Choisir sexe
-</option>
-
-<option value="Homme">
-Homme
-</option>
-
-
-<option value="Femme">
-Femme
-</option>
-
-
-</select>
-
-
-
-<select
-name="statut"
-onChange={handleChange}
->
-
-<option>
-Choisir statut
-</option>
-
-<option value="CELIBATAIRE">
-Célibataire
-</option>
-
-
-<option value="MARIE">
-Marié(e)
-</option>
-
-
-<option value="DIVORCE">
-Divorcé(e)
-</option>
-
-
-<option value="VEUF">
-Veuf(ve)
-</option>
-
-
-</select>
-
-
-
-<button>
-Envoyer
-</button>
-
-
-</form>
-
-
-
-
-
-{
-result &&
-
-<div>
-
-<h2>
-Inscription réussie
-</h2>
-
-
-<p>
-Agent ID :
-{result.agentId}
-</p>
-
-
-<p>
-Code Promo :
-{result.promoCode}
-</p>
-
-
-</div>
-
-}
-
-
-
-</div>
-
-);
-
-
-}
 
 
 export default AgentRegister;

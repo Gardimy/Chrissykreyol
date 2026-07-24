@@ -2,58 +2,40 @@ import axios from "axios";
 import type { AgentResponse } from "../types/agent";
 
 
-const API_URL =
-"http://localhost:3000/agents";
+const API_URL = "http://localhost:3000/agents";
 
 
 export interface CreateAgentData {
 
-  nom:string;
+    nom:string;
 
-  prenom:string;
+    prenom:string;
 
-  sexe:string;
+    sexe:string;
 
-  statut:string;
+    statut:string;
 
-  nifCin:string;
+    nifCin:string;
 
-  email:string;
+    email:string;
 
-  telephone:string;
+    telephone:string;
 
 }
 
 
 
-export const createAgent = async(
-  data:CreateAgentData
-):Promise<AgentResponse>=>{
+export const createAgent = async (
+    data:CreateAgentData
+):Promise<AgentResponse> => {
 
 
- const response = await axios.post(
-    API_URL,
-    data
- );
+    const response = await axios.post(
+        API_URL,
+        data
+    );
 
 
- return response.data;
-
-
-};
-
-
-
-export const getAgents = async()
-:Promise<AgentResponse[]>=>{
-
-
- const response = await axios.get(
-    API_URL
- );
-
-
- return response.data;
-
+    return response.data;
 
 };
