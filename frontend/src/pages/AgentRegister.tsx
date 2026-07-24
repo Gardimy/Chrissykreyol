@@ -3,6 +3,11 @@ import {
 } from "react";
 
 
+import background from "../assets/chrissy-background.png";
+
+import logo from "../assets/logo-chrissy.png";
+
+
 import {
     createAgent
 } from "../services/agent.service";
@@ -31,17 +36,15 @@ const AgentRegister = () => {
 
 
 
-    const [
-        agent,
-        setAgent
-    ] = useState<AgentResponse | null>(null);
+    const [agent,setAgent] =
+    useState<AgentResponse | null>(null);
 
 
 
-    const [
-        loading,
-        setLoading
-    ] = useState(false);
+    const [loading,setLoading] =
+    useState(false);
+
+
 
 
 
@@ -68,6 +71,7 @@ const AgentRegister = () => {
 
 
 
+
     const handleSubmit = async(
         e:React.FormEvent
     )=>{
@@ -76,7 +80,7 @@ const AgentRegister = () => {
         e.preventDefault();
 
 
-        try{
+        try {
 
 
             setLoading(true);
@@ -92,26 +96,10 @@ const AgentRegister = () => {
 
 
 
-            setFormData({
-
-                nom:"",
-                prenom:"",
-                sexe:"",
-                statut:"",
-                nifCin:"",
-                email:"",
-                telephone:""
-
-            });
+        } catch(error){
 
 
-
-        }catch(error){
-
-
-            console.error(
-                error
-            );
+            console.error(error);
 
 
             alert(
@@ -119,11 +107,10 @@ const AgentRegister = () => {
             );
 
 
-        }finally{
-
+        }
+        finally{
 
             setLoading(false);
-
 
         }
 
@@ -133,216 +120,511 @@ const AgentRegister = () => {
 
 
 
+
     return (
 
-        <div>
 
+<section
 
-            <h1>
-                Rejoindre Chrissy Kreyol
-            </h1>
+className="
+min-h-screen
+bg-cover
+bg-center
+py-12
+"
 
+style={{
 
+backgroundImage:
+`url(${background})`
 
-            {
-                !agent && (
+}}
 
-                <form
-                    onSubmit={handleSubmit}
-                >
+>
 
 
-                    <input
-                    type="text"
-                    name="nom"
-                    placeholder="Nom"
-                    value={formData.nom}
-                    onChange={handleChange}
-                    />
+<div
 
+className="
+max-w-3xl
+mx-auto
+bg-white/95
+rounded-2xl
+shadow-2xl
+p-8
+"
 
-                    <input
-                    type="text"
-                    name="prenom"
-                    placeholder="Prenom"
-                    value={formData.prenom}
-                    onChange={handleChange}
-                    />
 
+>
 
 
-                    <select
-                    name="sexe"
-                    value={formData.sexe}
-                    onChange={handleChange}
-                    >
 
-                        <option value="">
-                            Sexe
-                        </option>
+<img
 
-                        <option value="Homme">
-                            Homme
-                        </option>
+src={logo}
 
-                        <option value="Femme">
-                            Femme
-                        </option>
+className="
+w-32
+mx-auto
+mb-6
+"
 
+/>
 
-                    </select>
 
 
 
+{
+!agent ? (
 
-                    <select
-                    name="statut"
-                    value={formData.statut}
-                    onChange={handleChange}
-                    >
 
-                        <option value="">
-                            Statut matrimonial
-                        </option>
+<>
 
 
-                        <option value="Célibataire">
-                            Célibataire
-                        </option>
+<h1
 
+className="
+text-3xl
+font-bold
+text-center
+text-gray-800
+mb-8
+"
 
-                        <option value="Marié(e)">
-                            Marié(e)
-                        </option>
+>
 
+Devenir Agent Chrissy Kreyol
 
-                        <option value="Divorcé(e)">
-                            Divorcé(e)
-                        </option>
+</h1>
 
 
-                        <option value="Veuf(ve)">
-                            Veuf(ve)
-                        </option>
 
 
-                    </select>
+<form
 
+onSubmit={handleSubmit}
 
+className="
+space-y-5
+"
 
 
-                    <input
-                    type="text"
-                    name="nifCin"
-                    placeholder="NIF ou CIN"
-                    value={formData.nifCin}
-                    onChange={handleChange}
-                    />
+>
 
 
+<input
 
+className="
+w-full
+border
+rounded-lg
+p-3
+"
 
-                    <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    />
+name="nom"
 
+placeholder="Nom"
 
+value={formData.nom}
 
+onChange={handleChange}
 
-                    <input
-                    type="text"
-                    name="telephone"
-                    placeholder="Téléphone"
-                    value={formData.telephone}
-                    onChange={handleChange}
-                    />
+/>
 
 
 
 
-                    <button
-                    type="submit"
-                    disabled={loading}
-                    >
+<input
 
-                    {
-                        loading
-                        ?
-                        "Envoi..."
-                        :
-                        "Envoyer demande"
-                    }
+className="
+w-full
+border
+rounded-lg
+p-3
+"
 
-                    </button>
+name="prenom"
 
+placeholder="Prenom"
 
+value={formData.prenom}
 
-                </form>
+onChange={handleChange}
 
-                )
-            }
+/>
 
 
 
 
 
-            {
-                agent && (
+<select
 
-                <div>
+className="
+w-full
+border
+rounded-lg
+p-3
+"
 
+name="sexe"
 
-                    <h2>
-                        Félicitations {agent.nom} {agent.prenom}
-                    </h2>
+value={formData.sexe}
 
+onChange={handleChange}
 
+>
 
-                    <p>
-                        Votre inscription est validée.
-                    </p>
 
+<option value="">
 
+Choisir sexe
 
-                    <h3>
-                        Agent ID:
-                    </h3>
+</option>
 
-                    <strong>
-                        {agent.agentId}
-                    </strong>
 
+<option value="Homme">
 
+Homme
 
+</option>
 
-                    <h3>
-                        Code Promo:
-                    </h3>
 
+<option value="Femme">
 
-                    <strong>
-                        {agent.promoCode}
-                    </strong>
+Femme
 
+</option>
 
 
-                </div>
+</select>
 
-                )
-            }
 
 
 
-        </div>
+
+<select
+
+className="
+w-full
+border
+rounded-lg
+p-3
+"
+
+name="statut"
+
+value={formData.statut}
+
+onChange={handleChange}
+
+>
+
+
+<option value="">
+
+Statut matrimonial
+
+</option>
+
+
+<option value="Célibataire">
+
+Célibataire
+
+</option>
+
+
+<option value="Marié(e)">
+
+Marié(e)
+
+</option>
+
+
+<option value="Divorcé(e)">
+
+Divorcé(e)
+
+</option>
+
+
+<option value="Veuf(ve)">
+
+Veuf(ve)
+
+</option>
+
+
+</select>
+
+
+
+
+
+
+<input
+
+className="
+w-full
+border
+rounded-lg
+p-3
+"
+
+name="nifCin"
+
+placeholder="NIF / CIN"
+
+value={formData.nifCin}
+
+onChange={handleChange}
+
+/>
+
+
+
+
+
+<input
+
+className="
+w-full
+border
+rounded-lg
+p-3
+"
+
+type="email"
+
+name="email"
+
+placeholder="Email"
+
+value={formData.email}
+
+onChange={handleChange}
+
+/>
+
+
+
+
+
+<input
+
+className="
+w-full
+border
+rounded-lg
+p-3
+"
+
+name="telephone"
+
+placeholder="Téléphone"
+
+value={formData.telephone}
+
+onChange={handleChange}
+
+/>
+
+
+
+
+
+
+<button
+
+type="submit"
+
+disabled={loading}
+
+className="
+w-full
+bg-black
+text-white
+py-3
+rounded-lg
+font-bold
+hover:bg-gray-800
+transition
+"
+
+
+>
+
+
+{
+
+loading ?
+
+"Envoi en cours..." :
+
+"Envoyer ma demande"
+
+}
+
+
+
+</button>
+
+
+
+
+</form>
+
+
+
+</>
+
+
+
+)
+
+:(
+
+
+
+<div
+
+className="
+text-center
+"
+
+>
+
+
+<h2
+
+className="
+text-3xl
+font-bold
+text-green-600
+mb-5
+"
+
+>
+
+🎉 Félicitations {agent.nom} {agent.prenom}
+
+</h2>
+
+<p
+
+className="
+text-gray-700
+mb-6
+"
+
+>
+
+Votre inscription comme agent Chrissy Kreyol
+a été enregistrée avec succès.
+
+</p>
+
+<div
+
+className="
+bg-gray-100
+rounded-xl
+p-6
+space-y-4
+"
+
+
+>
+
+<div>
+
+<p className="font-semibold">
+
+Votre Agent ID
+
+</p>
+
+
+<p
+
+className="
+text-2xl
+font-bold
+text-blue-600
+"
+
+>
+
+{agent.agentId}
+
+</p>
+
+
+</div>
+
+<div>
+
+<p className="font-semibold">
+
+Votre Code Promotionnel
+
+</p>
+
+
+<p
+
+className="
+text-2xl
+font-bold
+text-purple-600
+"
+
+>
+
+{agent.promoCode}
+
+</p>
+
+
+</div>
+
+
+
+</div>
+
+<button
+
+onClick={()=>setAgent(null)}
+
+className="
+mt-6
+bg-black
+text-white
+px-6
+py-3
+rounded-lg
+"
+
+>
+
+Nouvelle inscription
+
+</button>
+
+</div>
+
+)
+
+}
+
+</div>
+
+
+</section>
+
 
     );
 
 };
-
-
 
 export default AgentRegister;
