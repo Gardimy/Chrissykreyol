@@ -14,8 +14,6 @@ import AgentRegister from "./pages/AgentRegister";
 import BoardRegister from "./pages/BoardRegister";
 
 
-
-
 function App(){
 
 
