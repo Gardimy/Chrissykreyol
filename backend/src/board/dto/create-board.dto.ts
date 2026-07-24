@@ -1,30 +1,52 @@
 import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
+ IsString,
+ IsEmail,
+ IsNotEmpty
 } from 'class-validator';
 
+
+
 export class CreateBoardDto {
-  @IsString()
-  @IsNotEmpty()
-  nom: string;
 
-  @IsString()
-  @IsNotEmpty()
-  prenom: string;
 
-  @IsString()
-  sexe: string;
+ @IsString()
+ @IsNotEmpty()
+ nom!:string;
 
-  @IsEmail()
-  email: string;
 
-  @IsString()
-  telephone: string;
 
-  @IsString()
-  profession: string;
+ @IsString()
+ @IsNotEmpty()
+ prenom!:string;
 
-  @IsString()
-  motivation: string;
+
+
+ @IsString()
+ @IsNotEmpty()
+ sexe!:string;
+
+
+
+ @IsEmail()
+ email!:string;
+
+
+
+ @IsString()
+ @IsNotEmpty()
+ telephone!:string;
+
+
+
+ @IsString()
+ @IsNotEmpty()
+ profession!:string;
+
+
+
+ @IsString()
+ @IsNotEmpty()
+ motivation!:string;
+
+
 }

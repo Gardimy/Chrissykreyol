@@ -15,19 +15,27 @@ import { UpdateAgentDto } from './dto/update-agent.dto';
 import { generateAgentId } from '../common/utils/generate-agent-id';
 import { generatePromoCode } from '../common/utils/generate-promo-code';
 
+import { EmailService } from '../email/email.service';
+
 @Injectable()
 export class AgentsService {
   constructor(
     @InjectRepository(Agent)
     private readonly agentRepository: Repository<Agent>,
+
+    private readonly emailService: EmailService,
   ) {}
 
-  async create(createAgentDto: CreateAgentDto): Promise<Agent> {
+  async create(
+    createAgentDto: CreateAgentDto,
+  ): Promise<Agent> {
     try {
-      // Vérifier email
-      const emailExists = await this.agentRepository.findOne({
-        where: { email: createAgentDto.email },
-      });
+      const emailExists =
+        await this.agentRepository.findOne({
+          where: {
+            email: createAgentDto.email,
+          },
+        });
 
       if (emailExists) {
         throw new ConflictException(
@@ -35,10 +43,12 @@ export class AgentsService {
         );
       }
 
-      // Vérifier NIF/CIN
-      const nifExists = await this.agentRepository.findOne({
-        where: { nifCin: createAgentDto.nifCin },
-      });
+      const nifExists =
+        await this.agentRepository.findOne({
+          where: {
+            nifCin: createAgentDto.nifCin,
+          },
+        });
 
       if (nifExists) {
         throw new ConflictException(
@@ -46,7 +56,6 @@ export class AgentsService {
         );
       }
 
-      // Génération ID + Promo
       const agentId = generateAgentId(
         createAgentDto.nom,
         createAgentDto.prenom,
@@ -60,7 +69,14 @@ export class AgentsService {
         promoCode,
       });
 
-      return await this.agentRepository.save(agent);
+      const savedAgent =
+        await this.agentRepository.save(agent);
+
+      await this.emailService.sendAgentNotification(
+        savedAgent,
+      );
+
+      return savedAgent;
     } catch (error) {
       if (
         error instanceof ConflictException ||
@@ -70,7 +86,7 @@ export class AgentsService {
       }
 
       throw new InternalServerErrorException(
-        'Une erreur est survenue lors de la création du compte agent.',
+        "Une erreur est survenue lors de la création de l'agent.",
       );
     }
   }
@@ -84,9 +100,10 @@ export class AgentsService {
   }
 
   async findOne(id: number): Promise<Agent> {
-    const agent = await this.agentRepository.findOne({
-      where: { id },
-    });
+    const agent =
+      await this.agentRepository.findOne({
+        where: { id },
+      });
 
     if (!agent) {
       throw new NotFoundException(
@@ -108,7 +125,9 @@ export class AgentsService {
     return await this.agentRepository.save(agent);
   }
 
-  async remove(id: number): Promise<{ message: string }> {
+  async remove(
+    id: number,
+  ): Promise<{ message: string }> {
     const agent = await this.findOne(id);
 
     await this.agentRepository.remove(agent);
