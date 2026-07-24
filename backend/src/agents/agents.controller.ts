@@ -8,106 +8,267 @@ import {
   Delete,
 } from '@nestjs/common';
 
+
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
+  ApiCreatedResponse,
+  ApiOkResponse,
 } from '@nestjs/swagger';
 
+
+
 import { AgentsService } from './agents.service';
-import { CreateAgentDto } from './dto/create-agent.dto';
-import { UpdateAgentDto } from './dto/update-agent.dto';
+
+import {
+  CreateAgentDto,
+} from './dto/create-agent.dto';
+
+
+import {
+  UpdateAgentDto,
+} from './dto/update-agent.dto';
+
+
+
+import {
+  AgentResponseDto,
+} from './dto/agent-response.dto';
+
 
 @ApiTags('Agents')
+
 @Controller('agents')
+
 export class AgentsController {
 
+
+
   constructor(
+
     private readonly agentsService: AgentsService,
+
   ) {}
 
+
+
+
+
   @Post()
+
   @ApiOperation({
-    summary: 'Créer un nouvel agent',
+
+    summary:
+    'Créer un nouvel agent',
+
   })
+
+
+  @ApiCreatedResponse({
+
+    description:
+    'Agent créé avec succès',
+
+    type:
+    AgentResponseDto,
+
+  })
+
+
   @ApiResponse({
-    status: 201,
-    description: 'Agent créé avec succès.',
+
+    status:409,
+
+    description:
+    'Email ou NIF/CIN existe déjà',
+
   })
-  @ApiResponse({
-    status: 409,
-    description: 'Email ou NIF/CIN existe déjà.',
-  })
+
+
   create(
-    @Body() createAgentDto: CreateAgentDto,
+
+    @Body()
+    createAgentDto: CreateAgentDto,
+
   ) {
-    return this.agentsService.create(createAgentDto);
+
+
+    return this.agentsService.create(
+      createAgentDto,
+    );
+
   }
 
   @Get()
+
   @ApiOperation({
-    summary: 'Lister tous les agents',
+
+    summary:
+    'Lister tous les agents',
+
   })
-  @ApiResponse({
-    status: 200,
-    description: 'Liste des agents.',
+
+
+  @ApiOkResponse({
+
+    description:
+    'Liste des agents',
+
+    type:[
+      AgentResponseDto,
+    ],
+
   })
-  findAll() {
+
+
+  findAll(){
+
     return this.agentsService.findAll();
+
   }
 
   @Get(':id')
+
+
   @ApiOperation({
-    summary: 'Rechercher un agent par ID',
+
+    summary:
+    'Rechercher un agent par ID',
+
   })
+
+
+  @ApiOkResponse({
+
+    description:
+    'Agent trouvé',
+
+    type:
+    AgentResponseDto,
+
+  })
+
+
   @ApiResponse({
-    status: 200,
-    description: 'Agent trouvé.',
+
+    status:404,
+
+    description:
+    'Agent introuvable',
+
   })
-  @ApiResponse({
-    status: 404,
-    description: 'Agent introuvable.',
-  })
+
+
   findOne(
-    @Param('id') id: string,
-  ) {
-    return this.agentsService.findOne(+id);
+
+    @Param('id')
+    id:string,
+
+  ){
+
+
+    return this.agentsService.findOne(
+      +id,
+    );
+
+
   }
+
 
   @Patch(':id')
+
+
   @ApiOperation({
-    summary: 'Modifier un agent',
+
+    summary:
+    'Modifier un agent',
+
   })
-  @ApiResponse({
-    status: 200,
-    description: 'Agent modifié.',
+
+
+  @ApiOkResponse({
+
+    description:
+    'Agent modifié',
+
+    type:
+    AgentResponseDto,
+
   })
-  @ApiResponse({
-    status: 404,
-    description: 'Agent introuvable.',
-  })
+
+
   update(
-    @Param('id') id: string,
-    @Body() updateAgentDto: UpdateAgentDto,
-  ) {
-    return this.agentsService.update(+id, updateAgentDto);
+
+    @Param('id')
+    id:string,
+
+
+    @Body()
+    updateAgentDto:UpdateAgentDto,
+
+  ){
+
+
+    return this.agentsService.update(
+
+      +id,
+
+      updateAgentDto,
+
+    );
+
+
   }
 
+
+
+
   @Delete(':id')
+
+
   @ApiOperation({
-    summary: 'Supprimer un agent',
+
+    summary:
+    'Supprimer un agent',
+
   })
+
+
   @ApiResponse({
-    status: 200,
-    description: 'Agent supprimé.',
+
+    status:200,
+
+    description:
+    'Agent supprimé',
+
   })
+
+
   @ApiResponse({
-    status: 404,
-    description: 'Agent introuvable.',
+
+    status:404,
+
+    description:
+    'Agent introuvable',
+
   })
+
+
   remove(
-    @Param('id') id: string,
-  ) {
-    return this.agentsService.remove(+id);
+
+    @Param('id')
+    id:string,
+
+  ){
+
+
+    return this.agentsService.remove(
+      +id,
+    );
+
+
   }
+
+
 }
